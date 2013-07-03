@@ -92,7 +92,7 @@ namespace TwitterRT
 
                 string html = String.Empty;
 
-                Console.WriteLine(resp.Header);
+                //Console.WriteLine(resp.Header);
                 //Console.WriteLine("Location: " + redirectUrl);
 
                 if (redirectUrl != null && redirectUrl != String.Empty)
