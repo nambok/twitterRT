@@ -1,0 +1,10 @@
+Proxy server address
+Proxy server port
+Twitter username
+Twitter password
+@{reply_username} reply text
+Watch userid stream
+twitterConsumerKey
+twitterConsumerSecret
+twitterOAuthToken
+twitterAccessToken
