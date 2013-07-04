@@ -65,7 +65,7 @@ namespace TwitterRT
                 twitterAPI.StreamData(userFollowId, delegate(string tweetId, string statusUpdate)
                 {
                     if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
-                    statusUpdate = "@" + userfollow + " RT:" + statusUpdate + " " + tweetURL + "?" + Helpers.RandomString(4);
+                    statusUpdate = "@" + userfollow + " " + statusUpdate + " " + tweetURL + "?" + Helpers.RandomString(4);
 
                     Console.WriteLine("TWEET RECEIVED ID: " + tweetId);
                     Console.WriteLine("POST STATUS UPDATE: " + statusUpdate);
