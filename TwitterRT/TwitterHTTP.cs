@@ -31,7 +31,7 @@ namespace TwitterRT
         private Chilkat.HttpRequest req;
         private Chilkat.HttpResponse resp;
 
-        public TwitterHTTP(string proxyDomain, int proxyPort)
+        public TwitterHTTP(string proxyDomain, int proxyPort, string proxyUsername, string proxyPassword)
         {
             this.http = new Chilkat.Http();
             this.req = new Chilkat.HttpRequest();
@@ -47,8 +47,10 @@ namespace TwitterRT
             this.http.SaveCookies = true;
             File.Delete("httpSessionLog.txt");
             this.http.SessionLogFilename = "httpSessionLog.txt";
-            this.http.ProxyDomain = proxyDomain;
-            this.http.ProxyPort = proxyPort;
+            if(proxyDomain != "false") this.http.ProxyDomain = proxyDomain;
+            if (proxyPort != 0) this.http.ProxyPort = proxyPort;
+            if (proxyUsername != "false") this.http.ProxyLogin = proxyUsername;
+            if (proxyPassword != "false") this.http.ProxyPassword = proxyPassword;
         }
 
         public bool doLogin(string username, string password)

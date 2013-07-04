@@ -16,7 +16,7 @@ namespace TwitterRT
             {
                 string[] configLines = System.IO.File.ReadAllLines("tweetbot.config.txt");
 
-                if (configLines.Length != 10)
+                if (configLines.Length < 11)
                 {
                     Console.WriteLine("ERROR loading config file");
                     Program.exit();
@@ -29,33 +29,49 @@ namespace TwitterRT
                 Console.WriteLine("Proxy server: " + proxy);
                 int proxyPort = int.Parse(configLines[1]);
                 Console.WriteLine("Proxy server port: " + proxyPort);
-                string username = configLines[2];
+                string proxyUsername = configLines[2];
+                Console.WriteLine("Proxy username: " + proxyUsername);
+                string proxyPassword = configLines[3];
+                Console.WriteLine("Proxy password: " + proxyPassword);
+                string username = configLines[4];
                 Console.WriteLine("Username: " + username);
-                string password = configLines[3];
+                string password = configLines[5];
                 Console.WriteLine("Password: " + password);
-                string tweet = configLines[4];
-                Console.WriteLine("Tweet: " + tweet);
-                string userid = configLines[5];
-                Console.WriteLine("Follow Uid: " + userid);
-                string twitterConsumerKey = configLines[6];
+                string tweetURL = configLines[6];
+                Console.WriteLine("Tweet URL: " + tweetURL);
+                string userfollow = configLines[7];
+                Console.WriteLine("Follow User: " + userfollow);
+                string twitterConsumerKey = configLines[8];
                 Console.WriteLine("twitterConsumerKey: " + twitterConsumerKey);
-                string twitterConsumerSecret = configLines[7];
+                string twitterConsumerSecret = configLines[9];
                 Console.WriteLine("twitterConsumerSecret: " + twitterConsumerSecret);
-                string twitterOAuthToken = configLines[8];
+                string twitterOAuthToken = configLines[10];
                 Console.WriteLine("twitterOAuthToken: " + twitterOAuthToken);
-                string twitterAccessToken = configLines[9];
+                string twitterAccessToken = configLines[11];
                 Console.WriteLine("twitterAccessToken: " + twitterAccessToken + "\n");
                 Console.WriteLine("\n=================================\n\n");
                 bool success;
 
                 TwitterAPI twitterAPI = new TwitterAPI(twitterConsumerKey,twitterConsumerSecret,twitterOAuthToken,twitterAccessToken);
                 Console.WriteLine("Following user....");
-                twitterAPI.Follow(username);
-                twitterAPI.StreamData(userid, delegate(string tweetId) { 
+                string userFollowId = twitterAPI.Follow(userfollow);
+
+                if (userFollowId == null || userFollowId == String.Empty)
+                {
+                    Console.WriteLine("ERROR: userid not found for " + userfollow);
+                    Program.exit();
+                }
+
+                twitterAPI.StreamData(userFollowId, delegate(string tweetId, string statusUpdate)
+                {
+                    if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
+                    statusUpdate = "@" + userfollow + " RT:" + statusUpdate + " " + tweetURL + "?" + Helpers.RandomString(4);
+
                     Console.WriteLine("TWEET RECEIVED ID: " + tweetId);
-                    TwitterHTTP twitterRequest = new TwitterHTTP(proxy, proxyPort);
+                    Console.WriteLine("POST STATUS UPDATE: " + statusUpdate);
+                    TwitterHTTP twitterRequest = new TwitterHTTP(proxy, proxyPort,proxyUsername,proxyPassword);
                     success = twitterRequest.doLogin(username, password);
-                    if( success) success = twitterRequest.postTweet(tweet, tweetId);
+                    if (success) success = twitterRequest.postTweet(statusUpdate, tweetId);
                     if (!success)
                     {
                         Console.WriteLine("An error occurred posting. check httpSessionLog.txt");

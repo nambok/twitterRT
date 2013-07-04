@@ -48,7 +48,7 @@ namespace TwitterRT
             this.twtCtx = new TwitterContext(this.auth);
         }
 
-        public void StreamData(string follow, Action<string> processAction)
+        public void StreamData(string follow, Action<string,string> processAction)
         {
             if (this.auth == null) return;
             StreamContent strmCont = null;
@@ -77,9 +77,10 @@ namespace TwitterRT
                     if (json["user"]["id_str"].ToString() == follow)
                     {
                         string id_tweet = json["id_str"].ToString();
+                        string statusText = json["text"].ToString();
                         Console.WriteLine("TWEET ID: " + id_tweet + "\n");
-                        Console.WriteLine(json["text"].ToString() + "\n");
-                        if (processAction != null) processAction(id_tweet);
+                        Console.WriteLine(statusText + "\n");
+                        if (processAction != null) processAction(id_tweet, statusText);
                     }
                 }
             })
@@ -96,14 +97,17 @@ namespace TwitterRT
             strmCont.CloseStream();
         }
 
-        public void Follow(string username)
+        public string Follow(string username)
         {
             var user = this.twtCtx.CreateFriendship(string.Empty, username, true);
 
             Console.WriteLine(
-                "User Name: {0}, Status: {1}",
+                "User Name: {0}\nLast status: {1}\nAt: {2}\n\n",
                 user.Name,
-                user.Status.Text);
+                user.Status.Text,
+                user.Status.CreatedAt);
+
+            return user.Identifier.UserID;
         }
     }
 }
