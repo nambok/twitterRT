@@ -48,7 +48,7 @@ namespace TwitterRT
             this.twtCtx = new TwitterContext(this.auth);
         }
 
-        public void StreamData(string follow, Action<string,string> processAction)
+        public void StreamData(List<string> follow, Action<string,string,string> processAction)
         {
             if (this.auth == null) return;
             StreamContent strmCont = null;
@@ -57,9 +57,9 @@ namespace TwitterRT
             Console.WriteLine("\nStreaming Content: \n");
 
             (from strm in this.twtCtx.UserStream
-             where strm.Type == UserStreamType.User &&
+             where strm.Type == UserStreamType.User //&&
                  //strm.With == "followings" &&
-                   strm.Follow == follow /*, "16761255"*/
+                   /*strm.Follow == follow , "16761255"*/
              select strm)
             .StreamingCallback(strm =>
             {
@@ -74,13 +74,16 @@ namespace TwitterRT
 
                 if (jsonDict != null && jsonDict.ContainsKey("id_str") && jsonDict.ContainsKey("user"))
                 {
-                    if (json["user"]["id_str"].ToString() == follow)
+                    foreach (string followUser in follow)
                     {
-                        string id_tweet = json["id_str"].ToString();
-                        string statusText = json["text"].ToString();
-                        Console.WriteLine("TWEET ID: " + id_tweet + "\n");
-                        Console.WriteLine(statusText + "\n");
-                        if (processAction != null) processAction(id_tweet, statusText);
+                        if (json["user"]["screen_name"].ToString() == followUser)
+                        {
+                            string id_tweet = json["id_str"].ToString();
+                            string statusText = json["text"].ToString();
+                            Console.WriteLine("TWEET ID: " + id_tweet + "\n");
+                            Console.WriteLine(statusText + "\n");
+                            if (processAction != null) processAction(id_tweet, statusText, json["user"]["screen_name"].ToString());
+                        }
                     }
                 }
             })

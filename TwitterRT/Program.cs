@@ -37,8 +37,8 @@ namespace TwitterRT
                 Console.WriteLine("Username: " + username);
                 string password = configLines[5];
                 Console.WriteLine("Password: " + password);
-                string tweetURL = configLines[6];
-                Console.WriteLine("Tweet URL: " + tweetURL);
+                string tweet = configLines[6];
+                Console.WriteLine("Tweet: " + tweet);
                 string userfollow = configLines[7];
                 Console.WriteLine("Follow User: " + userfollow);
                 string twitterConsumerKey = configLines[8];
@@ -50,28 +50,39 @@ namespace TwitterRT
                 string twitterAccessToken = configLines[11];
                 Console.WriteLine("twitterAccessToken: " + twitterAccessToken + "\n");
                 Console.WriteLine("\n=================================\n\n");
+                
+                //get a list of usernames to follow
+                List<string> userfollowList = userfollow.Split('|').ToList<string>();
+
                 bool success;
-
-                TwitterAPI twitterAPI = new TwitterAPI(twitterConsumerKey,twitterConsumerSecret,twitterOAuthToken,twitterAccessToken);
-                Console.WriteLine("Following user....");
-                string userFollowId = twitterAPI.Follow(userfollow);
-
-                if (userFollowId == null || userFollowId == String.Empty)
+                
+                TwitterAPI twitterAPI = new TwitterAPI(twitterConsumerKey, twitterConsumerSecret, twitterOAuthToken, twitterAccessToken);
+                    
+                foreach (string itemUser in userfollowList) // Loop through List with foreach
                 {
-                    Console.WriteLine("ERROR: userid not found for " + userfollow);
-                    Program.exit();
+                    Console.WriteLine("Following user " + itemUser + "....");
+                    string userFollowId = twitterAPI.Follow(itemUser);
+
+                    if (userFollowId == null || userFollowId == String.Empty)
+                    {
+                        Console.WriteLine("ERROR: userid not found for " + itemUser);
+                        continue;
+                    }
                 }
 
-                twitterAPI.StreamData(userFollowId, delegate(string tweetId, string statusUpdate)
+                twitterAPI.StreamData(userfollowList, delegate(string tweetId, string statusUpdate, string statusUsername)
                 {
                     if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
-                    statusUpdate = "@" + userfollow + " " + statusUpdate + " " + tweetURL + "?" + Helpers.RandomString(4);
+
+                    tweet = tweet.Replace("{tweetUsername}", statusUsername);
+                    tweet = tweet.Replace("{ramdom}", Helpers.RandomString(4));
+                    tweet = tweet.Replace("{tweet}", statusUpdate);
 
                     Console.WriteLine("TWEET RECEIVED ID: " + tweetId);
-                    Console.WriteLine("POST STATUS UPDATE: " + statusUpdate);
-                    TwitterHTTP twitterRequest = new TwitterHTTP(proxy, proxyPort,proxyUsername,proxyPassword);
+                    Console.WriteLine("POST STATUS UPDATE: " + tweet);
+                    TwitterHTTP twitterRequest = new TwitterHTTP(proxy, proxyPort, proxyUsername, proxyPassword);
                     success = twitterRequest.doLogin(username, password);
-                    if (success) success = twitterRequest.postTweet(statusUpdate, tweetId);
+                    if (success) success = twitterRequest.postTweet(tweet, tweetId);
                     if (!success)
                     {
                         Console.WriteLine("An error occurred posting. check httpSessionLog.txt");
