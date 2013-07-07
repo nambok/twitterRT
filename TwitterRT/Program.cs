@@ -55,7 +55,8 @@ namespace TwitterRT
                 List<string> userfollowList = userfollow.Split('|').ToList<string>();
                 
                 TwitterAPI twitterAPI = new TwitterAPI(twitterConsumerKey, twitterConsumerSecret, twitterOAuthToken, twitterAccessToken);
-                    
+                TwitterHTTP twitterRequest = new TwitterHTTP(proxy, proxyPort, proxyUsername, proxyPassword);
+                
                 foreach (string itemUser in userfollowList) // Loop through List with foreach
                 {
                     Console.WriteLine("Following user " + itemUser + "....");
@@ -81,7 +82,6 @@ namespace TwitterRT
 
                     Console.WriteLine("TWEET RECEIVED ID: " + tweetId);
                     Console.WriteLine("POST STATUS UPDATE: " + tweetPost);
-                    TwitterHTTP twitterRequest = new TwitterHTTP(proxy, proxyPort, proxyUsername, proxyPassword);
                     bool success = twitterRequest.doLogin(username, password);
                     if (success) success = twitterRequest.postTweet(tweetPost, tweetId);
                     if (!success)

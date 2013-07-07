@@ -42,11 +42,11 @@ namespace TwitterRT
                 return;
             }
 
-            this.http.CookieDir = "memory";
-            this.http.SendCookies = true;
-            this.http.SaveCookies = true;
-            File.Delete("httpSessionLog.txt");
-            this.http.SessionLogFilename = "httpSessionLog.txt";
+            if (!Directory.Exists("sessions"))
+            {
+                DirectoryInfo di = Directory.CreateDirectory("sessions");
+            }
+
             if(proxyDomain != "false") this.http.ProxyDomain = proxyDomain;
             if (proxyPort != 0) this.http.ProxyPort = proxyPort;
             if (proxyUsername != "false") this.http.ProxyLogin = proxyUsername;
@@ -58,6 +58,18 @@ namespace TwitterRT
             this.username = username;
             this.password = password;
 
+            if (!Directory.Exists(@"sessions\" + username))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(@"sessions\" + username);
+            }
+
+            File.Delete(@"sessions\" + username + @"\httpSessionLog.txt");
+            this.http.SessionLogFilename = @"sessions\" + username + @"\httpSessionLog.txt";
+            this.http.CookieDir = @"sessions\" + username;
+            this.http.SetCookieXml(this.twitterHost, this.http.GetCookieXml(this.twitterHost) );
+            this.http.SendCookies = true;
+            this.http.SaveCookies = true;
+
             if (!this.getAuthenticityToken()) return false;
             
             if (this.is_loggedin) return true;
@@ -65,6 +77,7 @@ namespace TwitterRT
             Console.WriteLine("Logging in.....");
 
             //  Build an HTTP POST request to login
+            this.req.RemoveAllParams();
             this.req.UsePost();
             this.req.Path = this.twitterLoginPath;
 
@@ -132,6 +145,7 @@ namespace TwitterRT
             Console.WriteLine("Posting message.....");
 
             //  Build an HTTP POST request to login
+            this.req.RemoveAllParams();
             this.req.UsePost();
             this.req.Path = this.twitterPostUrl;
 
@@ -166,7 +180,7 @@ namespace TwitterRT
         {
             if (html == String.Empty)
             {
-                html = http.QuickGetStr(this.twitterMainUrl);
+                html = this.http.QuickGetStr(this.twitterMainUrl);
             }
 
             if (html == null || html == String.Empty) return false;
