@@ -74,8 +74,10 @@ namespace TwitterRT
                     if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
 
                     tweetPost = tweetPost.Replace("{tweetUsername}", statusUsername);
-                    tweetPost = tweetPost.Replace("{ramdom}", Helpers.RandomString(4));
+                    tweetPost = tweetPost.Replace("{random}", Helpers.RandomString(4));
                     tweetPost = tweetPost.Replace("{tweet}", statusUpdate);
+
+                    tweetPost = Helpers.Spintax(tweetPost);
 
                     Console.WriteLine("TWEET RECEIVED ID: " + tweetId);
                     Console.WriteLine("POST STATUS UPDATE: " + tweetPost);
