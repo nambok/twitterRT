@@ -53,8 +53,6 @@ namespace TwitterRT
                 
                 //get a list of usernames to follow
                 List<string> userfollowList = userfollow.Split('|').ToList<string>();
-
-                bool success;
                 
                 TwitterAPI twitterAPI = new TwitterAPI(twitterConsumerKey, twitterConsumerSecret, twitterOAuthToken, twitterAccessToken);
                     
@@ -72,17 +70,18 @@ namespace TwitterRT
 
                 twitterAPI.StreamData(userfollowList, delegate(string tweetId, string statusUpdate, string statusUsername)
                 {
+                    string tweetPost = tweet;
                     if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
 
-                    tweet = tweet.Replace("{tweetUsername}", statusUsername);
-                    tweet = tweet.Replace("{ramdom}", Helpers.RandomString(4));
-                    tweet = tweet.Replace("{tweet}", statusUpdate);
+                    tweetPost = tweetPost.Replace("{tweetUsername}", statusUsername);
+                    tweetPost = tweetPost.Replace("{ramdom}", Helpers.RandomString(4));
+                    tweetPost = tweetPost.Replace("{tweet}", statusUpdate);
 
                     Console.WriteLine("TWEET RECEIVED ID: " + tweetId);
-                    Console.WriteLine("POST STATUS UPDATE: " + tweet);
+                    Console.WriteLine("POST STATUS UPDATE: " + tweetPost);
                     TwitterHTTP twitterRequest = new TwitterHTTP(proxy, proxyPort, proxyUsername, proxyPassword);
-                    success = twitterRequest.doLogin(username, password);
-                    if (success) success = twitterRequest.postTweet(tweet, tweetId);
+                    bool success = twitterRequest.doLogin(username, password);
+                    if (success) success = twitterRequest.postTweet(tweetPost, tweetId);
                     if (!success)
                     {
                         Console.WriteLine("An error occurred posting. check httpSessionLog.txt");

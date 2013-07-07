@@ -80,9 +80,12 @@ namespace TwitterRT
                         {
                             string id_tweet = json["id_str"].ToString();
                             string statusText = json["text"].ToString();
-                            Console.WriteLine("TWEET ID: " + id_tweet + "\n");
+                            string statusUsername = json["user"]["screen_name"].ToString(); 
+                            Console.WriteLine("TWEET ID: " + id_tweet);
+                            Console.WriteLine("USER: " + statusUsername);
                             Console.WriteLine(statusText + "\n");
-                            if (processAction != null) processAction(id_tweet, statusText, json["user"]["screen_name"].ToString());
+                            if (processAction != null) processAction(id_tweet, statusText, statusUsername);
+                            break;
                         }
                     }
                 }
