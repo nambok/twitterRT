@@ -72,7 +72,7 @@ namespace TwitterRT
                 twitterAPI.StreamData(userfollowList, delegate(string tweetId, string statusUpdate, string statusUsername)
                 {
                     string tweetPost = tweet;
-                    if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
+                    //if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
 
                     tweetPost = tweetPost.Replace("{tweetUsername}", statusUsername);
                     tweetPost = tweetPost.Replace("{random}", Helpers.RandomString(4));
