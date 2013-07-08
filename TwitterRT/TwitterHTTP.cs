@@ -186,11 +186,16 @@ namespace TwitterRT
             if (html == null || html == String.Empty) return false;
 
             //we need to get the following value <input type="hidden" name="authenticity_token" value="">
-            Match match = Regex.Match(html, "<input type=\"hidden\" name=\"authenticity_token\" value=\"(.+?)\">", RegexOptions.IgnoreCase);
+            Match match = Regex.Match(html, "<input[^>]*name=\"authenticity_token\"[^>]*>", RegexOptions.IgnoreCase);
 
             try
             {
-                this.authenticity_token = match.Groups[1].Value;
+                if (match.Value != null && match.Value != String.Empty)
+                {
+                    Match matchValue = Regex.Match(match.Value, "<[^>]*value=\"(.+?)\"[^>]*>", RegexOptions.IgnoreCase);
+
+                    this.authenticity_token = matchValue.Groups[1].Value;
+                }
             }
             catch (Exception ex)
             {
