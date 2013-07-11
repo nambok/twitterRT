@@ -72,7 +72,7 @@ namespace TwitterRT
                 twitterAPI.StreamData(userfollowList, delegate(string tweetId, string statusUpdate, string statusUsername)
                 {
                     string tweetPost = tweet;
-                    //if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
+                    if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
 
                     tweetPost = tweetPost.Replace("{tweetUsername}", statusUsername);
                     tweetPost = tweetPost.Replace("{random}", Helpers.RandomString(4));
@@ -82,12 +82,20 @@ namespace TwitterRT
 
                     Console.WriteLine("TWEET RECEIVED ID: " + tweetId);
                     Console.WriteLine("POST STATUS UPDATE: " + tweetPost);
-                    bool success = twitterRequest.doLogin(username, password);
-                    if (success) success = twitterRequest.postTweet(tweetPost, tweetId);
-                    if (!success)
+
+                    if (!statusUpdate.Contains("@"))
                     {
-                        Console.WriteLine("An error occurred posting. check httpSessionLog.txt");
-                        //Program.exit();
+                        bool success = twitterRequest.doLogin(username, password);
+                        if (success) success = twitterRequest.postTweet(tweetPost, tweetId);
+                        if (!success)
+                        {
+                            Console.WriteLine("An error occurred posting. check httpSessionLog.txt");
+                            //Program.exit();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ignoring Tweet");
                     }
                     Console.WriteLine("done.\n");
                 });
