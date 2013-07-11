@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using LinqToTwitter;
 using LitJson;
+using System.Web;
 using System.Threading;
 
 namespace TwitterRT
@@ -80,6 +81,7 @@ namespace TwitterRT
                         {
                             string id_tweet = json["id_str"].ToString();
                             string statusText = json["text"].ToString();
+                            statusText = HttpUtility.HtmlDecode(statusText);
                             string statusUsername = json["user"]["screen_name"].ToString(); 
                             Console.WriteLine("TWEET ID: " + id_tweet);
                             Console.WriteLine("USER: " + statusUsername);
