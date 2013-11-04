@@ -1,0 +1,14 @@
+
+---- Sending ----
+GET / HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Accept-Language: en-us,en;q=0.5
+User-Agent: Chilkat/1.0.0 (+http://www.chilkatsoft.com/ChilkatHttpUA.asp)
+Cookie: _twitter_sess=BAh7CzoJdXNlcmwrB6zOcFs6DnJldHVybl90byIZaHR0cHM6Ly90d2l0dGVy%250ALmNvbS86EHN0YXlfc2VjdXJlVDoHaWQiJTAxMTZhZTRiMzk4M2M5OGQzNTQx%250AN2I3ZjYwMWJhODE0Ogxjc3JmX2lkIiU4ZjM0MTIwY2U0Yzc3N2E4YzZhNjU2%250AODIxYzA1YWMzYToPY3JlYXRlZF9hdGwrCBkrXbs%252FAQ%253D%253D--675cf7e01b93b5b86b852cb196564e1a98901a0d; guest_id=v1%3A137323801269256050; auth_token=0828f763bbeb237395d86061737d39ef20dd6574; secure_session=true; twid=u%3D1534119596%7CHLQe5CJE79r7pes0UoPvzP64ec0%3D; twll=l%3D1373239935; dnt=1; remember_checked=0; remember_checked_on=0; lang=en
+Host: twitter.com
+Connection: Keep-Alive
+
+
+---- Not Connected ----

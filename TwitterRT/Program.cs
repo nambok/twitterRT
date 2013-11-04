@@ -1,118 +1,219 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Collections;
+using System.Diagnostics;
+using System.Data;
+using System.Threading;
 
 namespace TwitterRT
 {
     class Program
     {
+        static string twitterConsumerKey;
+        static string twitterConsumerSecret;
+        static string tweetID;
+        static int usersLimit;
+        static int minutesInactivity;
+        static int errorCountLimit;
+        public static int errorRequestCountLimit;
+        public static int errorTotalCount;
+        public static bool tweetIdVerified;
+
         static void Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            System.Console.ForegroundColor = System.ConsoleColor.DarkGreen;
+            
+            //app settings
+            twitterConsumerKey = "v3mwfdCQMRbRlbcymw640Q";
+            twitterConsumerSecret = "cJVM08RRvD0gubz88M967eht6x5EU2MSLVskFEP40";
+            usersLimit = 50;
+            minutesInactivity = 15;
+            errorCountLimit = 5;
+            errorRequestCountLimit = 10;
+            Worker.spinInterval = 5000; //5s
+
+            //db settings
+            string server = "10.0.0.4";
+            string user = "root";
+            string password = "mobo0800";
+            string database = "followtrain";
+
+            //read params
+            for (int i = 0; i < args.Length; i++)
+            {
+                switch(args[i])
+                {
+                    case "-twitterConsumerKey":
+                        twitterConsumerKey = args[i + 1];
+                        break;
+
+                    case "-twitterConsumerSecret":
+                        twitterConsumerSecret = args[i + 1];
+                        break;
+                
+                    case "-usersLimit":
+                        usersLimit = System.Int32.Parse( args[i + 1] );
+                        break;
+
+                    case "-minutesInactivity":
+                        minutesInactivity = System.Int32.Parse(args[i + 1]);
+                        break;
+
+                    case "-errorCountLimit":
+                        errorCountLimit = System.Int32.Parse(args[i + 1]);
+                        break;
+
+                    case "-errorRequestCountLimit":
+                        errorRequestCountLimit = System.Int32.Parse(args[i + 1]);
+                        break;
+
+                    case "-spinInterval":
+                        Worker.spinInterval = System.Int32.Parse(args[i + 1]);
+                        break;
+
+                    case "-server":
+                        server = args[i + 1];
+                        break;
+
+                    case "-user":
+                        user = args[i + 1];
+                        break;
+
+                    case "-password":
+                        password = args[i + 1];
+                        break;
+
+                    case "-database":
+                        database = args[i + 1];
+                        break;
+                }
+
+                i++;
+            }
+
+            System.Console.WriteLine("##################################");
+            System.Console.WriteLine("#### NAMBOKINATOR TWEET BOT ####");
+            System.Console.WriteLine("##################################\n\n");
+            System.Console.WriteLine("twitterConsumerKey: " + twitterConsumerKey);
+            System.Console.WriteLine("twitterConsumerSecret: " + twitterConsumerSecret);
+            System.Console.WriteLine("User limit: " + usersLimit);
+            System.Console.WriteLine("Error count limit: " + errorCountLimit);
+            System.Console.WriteLine("Inactivity limit: " + minutesInactivity);
+            System.Console.WriteLine("Spin interval: " + Worker.spinInterval);
+            System.Console.WriteLine("_________________________________\n");
+
+            //connect to db
+            DBConnect.SetServerPrefences(server, user, password, database);
+            
+            startPool();
+        }
+
+        static void startPool()
+        {
+            //reset errors
+            errorTotalCount = 0;
+
+            while (System.String.IsNullOrWhiteSpace(tweetID))
+            {
+                System.Console.Write("\n\nEnter the tweet ID: ");
+                tweetID = System.Console.In.ReadLine();
+            }
+
+            System.Console.WriteLine("\nTweet ID: " + tweetID);
+
+            string twitterOAuthToken = "";
+            string twitterAccessToken = "";
+            int rowid = 0;
+
+            double minutesInactivityVar = Helpers.ConvertToTimestamp() - ( minutesInactivity * 60 );
 
             try
             {
-                string[] configLines = System.IO.File.ReadAllLines("tweetbot.config.txt");
+                //read records
+                DataTable results = DBConnect.Select(System.String.Format("SELECT id, consumer_key, consumer_secret_key FROM users WHERE last_update < {0} LIMIT {1}", minutesInactivityVar, usersLimit), null);
 
-                if (configLines.Length < 11)
+                tweetIdVerified = false;
+
+                foreach (DataRow row in results.Rows)
                 {
-                    Console.WriteLine("ERROR loading config file");
-                    Program.exit();
-                }
+                    //set tokens
+                    twitterOAuthToken = row["consumer_key"].ToString();   //Access token
+                    twitterAccessToken = row["consumer_secret_key"].ToString();   //Access token secret
+                    rowid = System.Int32.Parse( row["id"].ToString() ); 
 
-                Console.WriteLine("##################################");
-                Console.WriteLine("####  NAMBOKINATOR TWEET BOT  ####");
-                Console.WriteLine("##################################\n\n");
-                string proxy = configLines[0];
-                Console.WriteLine("Proxy server: " + proxy);
-                int proxyPort = int.Parse(configLines[1]);
-                Console.WriteLine("Proxy server port: " + proxyPort);
-                string proxyUsername = configLines[2];
-                Console.WriteLine("Proxy username: " + proxyUsername);
-                string proxyPassword = configLines[3];
-                Console.WriteLine("Proxy password: " + proxyPassword);
-                string username = configLines[4];
-                Console.WriteLine("Username: " + username);
-                string password = configLines[5];
-                Console.WriteLine("Password: " + password);
-                string tweet = configLines[6];
-                Console.WriteLine("Tweet: " + tweet);
-                string userfollow = configLines[7];
-                Console.WriteLine("Follow User: " + userfollow);
-                string twitterConsumerKey = configLines[8];
-                Console.WriteLine("twitterConsumerKey: " + twitterConsumerKey);
-                string twitterConsumerSecret = configLines[9];
-                Console.WriteLine("twitterConsumerSecret: " + twitterConsumerSecret);
-                string twitterOAuthToken = configLines[10];
-                Console.WriteLine("twitterOAuthToken: " + twitterOAuthToken);
-                string twitterAccessToken = configLines[11];
-                Console.WriteLine("twitterAccessToken: " + twitterAccessToken + "\n");
-                Console.WriteLine("\n=================================\n\n");
-                
-                //get a list of usernames to follow
-                List<string> userfollowList = userfollow.Split('|').ToList<string>();
-                
-                TwitterAPI twitterAPI = new TwitterAPI(twitterConsumerKey, twitterConsumerSecret, twitterOAuthToken, twitterAccessToken);
-                TwitterHTTP twitterRequest = new TwitterHTTP(proxy, proxyPort, proxyUsername, proxyPassword);
-                
-                foreach (string itemUser in userfollowList) // Loop through List with foreach
-                {
-                    Console.WriteLine("Following user " + itemUser + "....");
-                    string userFollowId = twitterAPI.Follow(itemUser);
-
-                    if (userFollowId == null || userFollowId == String.Empty)
+                    if (System.String.IsNullOrWhiteSpace(twitterAccessToken) ||
+                        System.String.IsNullOrWhiteSpace(twitterOAuthToken)  )
                     {
-                        Console.WriteLine("ERROR: userid not found for " + itemUser);
+                        System.Console.WriteLine("\nInvalid OUATH data");
                         continue;
                     }
+
+                    if ( !tweetIdVerified )
+                    {
+                        if( Worker.runThread(rowid, twitterConsumerKey, twitterConsumerSecret, twitterOAuthToken, twitterAccessToken, tweetID, true) ){
+                            tweetIdVerified = true;
+                        }
+                        Thread.Sleep(Worker.spinInterval);
+                    }
+                    else{
+                        Worker.addItem(rowid, twitterConsumerKey, twitterConsumerSecret, twitterOAuthToken, twitterAccessToken, tweetID, false);
+                    }
                 }
 
-                twitterAPI.StreamData(userfollowList, delegate(string tweetId, string statusUpdate, string statusUsername)
+                if (tweetIdVerified)
                 {
-                    string tweetPost = tweet;
-                    if (statusUpdate.Length > 90) statusUpdate = statusUpdate.Substring(0, 85) + "...";
+                    Worker.start();
 
-                    tweetPost = tweetPost.Replace("{tweetUsername}", statusUsername);
-                    tweetPost = tweetPost.Replace("{random}", Helpers.RandomString(4));
-                    tweetPost = tweetPost.Replace("{tweet}", statusUpdate);
-
-                    tweetPost = Helpers.Spintax(tweetPost);
-
-                    Console.WriteLine("TWEET RECEIVED ID: " + tweetId);
-                    Console.WriteLine("POST STATUS UPDATE: " + tweetPost);
-
-                    if (!statusUpdate.Contains("@"))
-                    {
-                        bool success = twitterRequest.doLogin(username, password);
-                        if (success) success = twitterRequest.postTweet(tweetPost, tweetId);
-                        if (!success)
-                        {
-                            Console.WriteLine("An error occurred posting. check httpSessionLog.txt");
-                            //Program.exit();
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ignoring Tweet");
-                    }
-                    Console.WriteLine("done.\n");
-                });
+                    // Wait for the sort to complete.
+                    Worker.waitComplete();
+                }
             }
-            catch (Exception ex)
+            catch (System.Exception e)
             {
-                Console.WriteLine("ERROR: " + ex.Message);
+                System.Console.WriteLine("\n\nApplication Error: {0}", e.Message);
             }
 
-            Program.exit();
+            System.Console.WriteLine("All done. Total errors {0}", errorTotalCount);
+
+            Program.menu();
         }
 
-        static void exit()
+        static void menu()
         {
-            Console.Write("\n\nPress any key to end program . . . ");
-            Console.ReadKey(true);
-            Environment.Exit(0);
+            System.Console.WriteLine("\n\n====== MENU =====");
+            System.Console.WriteLine("=====================");
+            System.Console.WriteLine("1. RUN AGAIN");
+            System.Console.WriteLine("2. QUIT");
+
+            string option = null;
+            bool invalidOption = true;
+
+            while ( invalidOption )
+            {
+                System.Console.Write("\nSelect your option: ");
+                option = System.Console.In.ReadLine();
+
+                switch (option)
+                {
+                    case "1":
+                        invalidOption = false;
+                        startPool();
+                        break;
+                    
+                    case "2":
+                        invalidOption = false;
+                        Program.exit();
+                        break;
+                }
+            }
+            
+        }
+
+        static public void exit()
+        {
+            System.Environment.Exit(0);
         }
     }
 }

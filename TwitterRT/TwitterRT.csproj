@@ -25,7 +25,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -69,11 +69,11 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ChilkatDotNet4">
-      <HintPath>lib\ChilkatDotNet4.dll</HintPath>
-    </Reference>
     <Reference Include="LinqToTwitter">
       <HintPath>lib\LinqToTwitter.dll</HintPath>
+    </Reference>
+    <Reference Include="mysql.data">
+      <HintPath>lib\mysql.data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -87,11 +87,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBConnect.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="smartPool\CallerThreadContext.cs" />
+    <Compile Include="smartPool\CanceledWorkItemsGroup.cs" />
+    <Compile Include="smartPool\EventWaitHandle.cs" />
+    <Compile Include="smartPool\EventWaitHandleFactory.cs" />
+    <Compile Include="smartPool\Exceptions.cs" />
+    <Compile Include="smartPool\Interfaces.cs" />
+    <Compile Include="smartPool\InternalInterfaces.cs" />
+    <Compile Include="smartPool\PriorityQueue.cs" />
+    <Compile Include="smartPool\SLExt.cs" />
+    <Compile Include="smartPool\SmartThreadPool.cs" />
+    <Compile Include="smartPool\SmartThreadPool.ThreadEntry.cs" />
+    <Compile Include="smartPool\Stopwatch.cs" />
+    <Compile Include="smartPool\STPEventWaitHandle.cs" />
+    <Compile Include="smartPool\STPPerformanceCounter.cs" />
+    <Compile Include="smartPool\STPStartInfo.cs" />
+    <Compile Include="smartPool\SynchronizedDictionary.cs" />
+    <Compile Include="smartPool\WIGStartInfo.cs" />
+    <Compile Include="smartPool\WorkItem.cs" />
+    <Compile Include="smartPool\WorkItem.WorkItemResult.cs" />
+    <Compile Include="smartPool\WorkItemFactory.cs" />
+    <Compile Include="smartPool\WorkItemInfo.cs" />
+    <Compile Include="smartPool\WorkItemResultTWrapper.cs" />
+    <Compile Include="smartPool\WorkItemsGroup.cs" />
+    <Compile Include="smartPool\WorkItemsGroupBase.cs" />
+    <Compile Include="smartPool\WorkItemsQueue.cs" />
     <Compile Include="TwitterAPI.cs" />
-    <Compile Include="TwitterHTTP.cs" />
+    <Compile Include="Worker.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -123,6 +149,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -7,7 +7,6 @@ C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Debug\TwitterRT
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Debug\TwitterRT.pdb
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Debug\TwitterRT.exe
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Debug\TwitterRT.pdb
-C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Debug\ChilkatDotNet4.dll
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Debug\TwitterRT.exe.config
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Debug\LinqToTwitter.dll
@@ -16,3 +15,4 @@ C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Debug\TwitterRT.app
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Debug\TwitterRT.TrustInfo.xml
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Debug\TwitterRT.exe.manifest
 C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Debug\TwitterRT.application
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Debug\mysql.data.dll

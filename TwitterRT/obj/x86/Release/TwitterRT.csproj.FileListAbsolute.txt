@@ -1,0 +1,13 @@
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Release\TwitterRT.exe.config
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Release\TwitterRT.exe.manifest
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Release\TwitterRT.application
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Release\TwitterRT.exe
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Release\TwitterRT.pdb
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Release\LinqToTwitter.dll
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\bin\Release\mysql.data.dll
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Release\TwitterRT.TrustInfo.xml
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Release\TwitterRT.exe.manifest
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Release\TwitterRT.application
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Release\TwitterRT.exe
+C:\Users\IT Manager\Desktop\PROJECTS\TwitterRT\TwitterRT\obj\x86\Release\TwitterRT.pdb
