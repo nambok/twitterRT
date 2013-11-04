@@ -39,5 +39,11 @@ namespace TwitterRT
             // Return the modified string.
             return str;
         }
+
+        public static int ConvertToTimestamp()
+        {
+            return (Int32)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
+
     }
 }

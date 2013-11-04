@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<unnamed>
+    <cookie key=".twitter.com,/,_twitter_sess" v="0" secure="yes">
+        <_twitter_sess>BAh7CzoJdXNlcmwrB6zOcFs6DnJldHVybl90byIZaHR0cHM6Ly90d2l0dGVy%250ALmNvbS86EHN0YXlfc2VjdXJlVDoHaWQiJTAxMTZhZTRiMzk4M2M5OGQzNTQx%250AN2I3ZjYwMWJhODE0Ogxjc3JmX2lkIiU4ZjM0MTIwY2U0Yzc3N2E4YzZhNjU2%250AODIxYzA1YWMzYToPY3JlYXRlZF9hdGwrCBkrXbs%252FAQ%253D%253D--675cf7e01b93b5b86b852cb196564e1a98901a0d</_twitter_sess>
+    </cookie>
+    <cookie key=".twitter.com,/,guest_id" v="0" expire="Tue, 07-Jul-2015 23:00:12 UTC">
+        <guest_id>v1%3A137323801269256050</guest_id>
+    </cookie>
+    <cookie key=".twitter.com,/,auth_token" v="0" secure="yes">
+        <auth_token>0828f763bbeb237395d86061737d39ef20dd6574</auth_token>
+    </cookie>
+    <cookie key=".twitter.com,/,secure_session" v="0">
+        <secure_session>true</secure_session>
+    </cookie>
+    <cookie key=".twitter.com,/,twid" v="0" secure="yes">
+        <twid>u%3D1534119596%7CHLQe5CJE79r7pes0UoPvzP64ec0%3D</twid>
+    </cookie>
+    <cookie key=".twitter.com,/,twll" v="0" expire="Sat, 08-Jul-2023 11:32:15 GMT">
+        <twll>l%3D1373239935</twll>
+    </cookie>
+    <cookie key=".twitter.com,/,dnt" v="0" expire="Tue, 11-Jul-2023 15:41:06 GMT">
+        <dnt>1</dnt>
+    </cookie>
+    <cookie key=".twitter.com,/,remember_checked" v="0" expire="Sat, 08-Jul-2023 11:32:15 GMT">
+        <remember_checked>0</remember_checked>
+    </cookie>
+    <cookie key=".twitter.com,/,remember_checked_on" v="0" expire="Sat, 08-Jul-2023 11:32:15 GMT">
+        <remember_checked_on>0</remember_checked_on>
+    </cookie>
+    <cookie key="twitter.com,/,lang" v="0">
+        <lang>en</lang>
+    </cookie>
+    <cookie key="twitter.com,,h" v="0" expire="Mon, 8-Jul-2013 03:00:31 GMT">
+        <h>%7B%22newer_tweet_id%22%3A%22354061603014049792%22%2C%22older_tweet_id%22%3A%22354050979127230465%22%2C%22promoted_content%22%3A%7B%22impression_id%22%3A%225e0edc77103b6b2f%22%2C%22disclosure_type%22%3A%22promoted%22%2C%22disclosure_text%22%3A%22%22%7D%2C%22advertiser_id%22%3A%2217816420%22%2C%22tweet_id%22%3A%22352488462005456896%22%7D</h>
+    </cookie>
+</unnamed>
