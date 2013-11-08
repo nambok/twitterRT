@@ -6,6 +6,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Data;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace TwitterRT
 {
@@ -21,12 +22,47 @@ namespace TwitterRT
         public static int errorTotalCount;
         public static bool tweetIdVerified;
 
+        static string server;
+        static string user;
+        static string password;
+        static string database;
+
         static void Main(string[] args)
         {
             System.Console.ForegroundColor = System.ConsoleColor.DarkGreen;
+
+            //defaults
+            usersLimit = 50;
+            minutesInactivity = 15;
+            errorCountLimit = 5;
+            errorRequestCountLimit = 10;
+            Worker.spinInterval = 5000; //5s
+
+            string[] configLines = System.IO.File.ReadAllLines("tweetbot.config.txt");
+
+            if (configLines.Length < 1)
+            {
+                System.Console.WriteLine("ERROR loading config file");
+                //Program.exit();
+            }
+
+            foreach (string configLine in configLines)
+            {
+                try
+                {
+                    string[] configLineParams = Regex.Split(configLine, "::");
+                    setConfigValue(configLineParams[0], configLineParams[1]);
+                    
+                }
+                catch (System.Exception e)
+                {
+                    System.Console.WriteLine("ERROR reading config line {0}", configLine);
+                }
+            }
             
-            //app settings
-            twitterConsumerKey = "v3mwfdCQMRbRlbcymw640Q";
+
+            //read from config
+            /*twitterConsumerKey = "v3mwfdCQMRbRlbcymw640Q";
             twitterConsumerSecret = "cJVM08RRvD0gubz88M967eht6x5EU2MSLVskFEP40";
             usersLimit = 50;
             minutesInactivity = 15;
@@ -35,65 +71,15 @@ namespace TwitterRT
             Worker.spinInterval = 5000; //5s
 
             //db settings
-            string server = "10.0.0.4";
-            string user = "root";
-            string password = "mobo0800";
-            string database = "followtrain";
+            server = "10.0.0.4";
+            user = "root";
+            password = "mobo0800";
+            database = "followtrain";*/
 
             //read params
             for (int i = 0; i < args.Length; i++)
             {
-                switch(args[i])
-                {
-                    case "-twitterConsumerKey":
-                        twitterConsumerKey = args[i + 1];
-                        break;
-
-                    case "-twitterConsumerSecret":
-                        twitterConsumerSecret = args[i + 1];
-                        break;
-                
-                    case "-usersLimit":
-                        usersLimit = System.Int32.Parse( args[i + 1] );
-                        break;
-
-                    case "-minutesInactivity":
-                        minutesInactivity = System.Int32.Parse(args[i + 1]);
-                        break;
-
-                    case "-errorCountLimit":
-                        errorCountLimit = System.Int32.Parse(args[i + 1]);
-                        break;
-
-                    case "-errorRequestCountLimit":
-                        errorRequestCountLimit = System.Int32.Parse(args[i + 1]);
-                        break;
-
-                    case "-spinInterval":
-                        Worker.spinInterval = System.Int32.Parse(args[i + 1]);
-                        break;
-
-                    case "-server":
-                        server = args[i + 1];
-                        break;
-
-                    case "-user":
-                        user = args[i + 1];
-                        break;
-
-                    case "-password":
-                        password = args[i + 1];
-                        break;
-
-                    case "-database":
-                        database = args[i + 1];
-                        break;
-
-                    case "-tweetID":
-                        tweetID = args[i + 1];
-                        break;
-                }
-
+                setConfigValue(args[i], args[i + 1]);
                 i++;
             }
 
@@ -112,6 +98,60 @@ namespace TwitterRT
             DBConnect.SetServerPrefences(server, user, password, database);
             
             startPool();
+        }
+
+        static void setConfigValue(string configKey, string configValue)
+        {
+            switch (configKey)
+            {
+                case "twitterConsumerKey":
+                    twitterConsumerKey = configValue;
+                    break;
+
+                case "twitterConsumerSecret":
+                    twitterConsumerSecret = configValue;
+                    break;
+
+                case "usersLimit":
+                    usersLimit = System.Int32.Parse(configValue);
+                    break;
+
+                case "minutesInactivity":
+                    minutesInactivity = System.Int32.Parse(configValue);
+                    break;
+
+                case "errorCountLimit":
+                    errorCountLimit = System.Int32.Parse(configValue);
+                    break;
+
+                case "errorRequestCountLimit":
+                    errorRequestCountLimit = System.Int32.Parse(configValue);
+                    break;
+
+                case "spinInterval":
+                    Worker.spinInterval = System.Int32.Parse(configValue);
+                    break;
+
+                case "server":
+                    server = configValue;
+                    break;
+
+                case "user":
+                    user = configValue;
+                    break;
+
+                case "password":
+                    password = configValue;
+                    break;
+
+                case "database":
+                    database = configValue;
+                    break;
+
+                case "tweetID":
+                    tweetID = configValue;
+                    break;
+            }
         }
 
         static void startPool()
