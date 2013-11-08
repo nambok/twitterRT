@@ -88,6 +88,10 @@ namespace TwitterRT
                     case "-database":
                         database = args[i + 1];
                         break;
+
+                    case "-tweetID":
+                        tweetID = args[i + 1];
+                        break;
                 }
 
                 i++;
@@ -132,7 +136,7 @@ namespace TwitterRT
             try
             {
                 //read records
-                DataTable results = DBConnect.Select(System.String.Format("SELECT id, consumer_key, consumer_secret_key FROM users WHERE last_update < {0} LIMIT {1}", minutesInactivityVar, usersLimit), null);
+                DataTable results = DBConnect.Select(System.String.Format("SELECT id, consumer_key, consumer_secret_key FROM users WHERE last_update < {0} AND error_count < {1} LIMIT {2}", minutesInactivityVar, errorCountLimit, usersLimit), null);
 
                 tweetIdVerified = false;
 
