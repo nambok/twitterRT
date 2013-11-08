@@ -1,0 +1,12 @@
+﻿twitterConsumerKey
+twitterConsumerSecret
+usersLimit
+minutesInactivity
+errorCountLimit
+errorRequestCountLimit
+spinInterval
+server
+user
+password
+database
+tweetID
