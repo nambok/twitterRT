@@ -59,22 +59,6 @@ namespace TwitterRT
                     System.Console.WriteLine("ERROR reading config line {0}", configLine);
                 }
             }
-            
-
-            //read from config
-            /*twitterConsumerKey = "v3mwfdCQMRbRlbcymw640Q";
-            twitterConsumerSecret = "cJVM08RRvD0gubz88M967eht6x5EU2MSLVskFEP40";
-            usersLimit = 50;
-            minutesInactivity = 15;
-            errorCountLimit = 5;
-            errorRequestCountLimit = 10;
-            Worker.spinInterval = 5000; //5s
-
-            //db settings
-            server = "10.0.0.4";
-            user = "root";
-            password = "mobo0800";
-            database = "followtrain";*/
 
             //read params
             for (int i = 0; i < args.Length; i++)
